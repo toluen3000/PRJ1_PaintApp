@@ -28,6 +28,7 @@ class DrawingView (context: Context, attributeSet: AttributeSet): View(context, 
     private lateinit var canvas: Canvas
     private lateinit var canvasBitmap: Bitmap
     private var brushSize: Float = 0.toFloat()
+    private val paths = mutableListOf<FingerPath>() // taạo list để lưu nét
     init {
         setUpDrawing()
     }
@@ -41,6 +42,12 @@ class DrawingView (context: Context, attributeSet: AttributeSet): View(context, 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawBitmap(canvasBitmap,0f,0f,drawPaint)
+
+        for (path in paths){
+            drawPaint.strokeWidth = path.brushThickness
+            drawPaint.color = path.color
+            canvas.drawPath(path,drawPaint)
+        }
 
         if (!drawPath.isEmpty ) { // nếu có 1 nét được vẽ
             drawPaint.strokeWidth = drawPath.brushThickness // đặt độ dày cọ
@@ -72,6 +79,8 @@ class DrawingView (context: Context, attributeSet: AttributeSet): View(context, 
             // sự kiện này sẽ được kích hoạt khi người dùng nhấc ngón tay khỏi màn hình
             MotionEvent.ACTION_UP -> {
                 drawPath = FingerPath(color,brushSize)
+                // khi user nhấc ngón tay lên thì lưu nét vẽ trên màn hình
+                paths.add(drawPath) // + line 46
             }
             else -> return false
 
