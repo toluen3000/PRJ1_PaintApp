@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.graphics.Path
+import android.view.MotionEvent
 import android.view.View
 //Class Kotlin là một khai báo để tạo ra các đối tượng.
 //File Kotlin là một tệp tin chứa mã nguồn bao gồm các class Kotlin và các thành phần khác.
@@ -15,7 +16,7 @@ class DrawingView (context: Context, attributeSet: AttributeSet): View(context, 
     // cho việc tạo giao diện cho drawapp, đảm bảo android có thể nhận dạng được nó.
     // tạo các inner class chứa các thuộc tính của ứng dụng
     // drawing path
-    private lateinit var drawPath: FingerPath
+    private lateinit var drawPath: FingerPath // lưu trữ đường vẽ hiện tại, vẽ đường vẽ, tương tác với đường vẽ (func)
     // define what to draw
     private lateinit var canvasPaint: Paint
     //define how to draw
@@ -41,11 +42,42 @@ class DrawingView (context: Context, attributeSet: AttributeSet): View(context, 
         super.onDraw(canvas)
         canvas.drawBitmap(canvasBitmap,0f,0f,drawPaint)
 
-        if (!drawPath.isEmpty ) {
-            drawPaint.strokeWidth = drawPath.brushThickness
-            drawPaint.color = drawPath.color
+        if (!drawPath.isEmpty ) { // nếu có 1 nét được vẽ
+            drawPaint.strokeWidth = drawPath.brushThickness // đặt độ dày cọ
+            drawPaint.color = drawPath.color // màu được chỉnh về màu được lưu trữ trong path (internal class)
             canvas.drawPath(drawPath,drawPaint) //drawing path on canvas
         }
+    }
+
+    // chức năng này sẽ được gọi bởi hệ thống khi người dùng chạm vào màn hình
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        // lấy toà độ
+        val touchX = event?.x
+        val touchY = event?.y
+
+        when (event?.action){
+            // sự kiện này sẽ được kích hoạt khi người dùng bỏ tay ra khỏi màn hình
+            MotionEvent.ACTION_DOWN ->{
+                drawPath.color = color
+                drawPath.brushThickness = brushSize.toFloat()
+                drawPath.reset() // reset path trước khi đặt điểm ban đầu
+                drawPath.moveTo(touchX!!,touchY!!)
+            }
+            // sự kiện này sẽ được kích hoạt khi người dùng băt đầu di chuyển ngón tay;
+            // nó sẽ được kích hoạt liên tục đến khi users nhấc ngón tay lên
+            MotionEvent.ACTION_MOVE ->{
+                drawPath.lineTo(touchX!!,touchY!!)
+
+            }
+            // sự kiện này sẽ được kích hoạt khi người dùng nhấc ngón tay khỏi màn hình
+            MotionEvent.ACTION_UP -> {
+                drawPath = FingerPath(color,brushSize)
+            }
+            else -> return false
+
+        }
+        invalidate() // làm mới layout để phản ánh những thay đổi của bản vẽ
+        return true
     }
 
     private fun setUpDrawing() {
