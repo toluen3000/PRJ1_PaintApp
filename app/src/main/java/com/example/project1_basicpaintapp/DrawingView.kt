@@ -1,5 +1,6 @@
 package com.example.project1_basicpaintapp
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -7,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.graphics.Path
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 //Class Kotlin là một khai báo để tạo ra các đối tượng.
@@ -57,6 +59,7 @@ class DrawingView (context: Context, attributeSet: AttributeSet): View(context, 
     }
 
     // chức năng này sẽ được gọi bởi hệ thống khi người dùng chạm vào màn hình
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         // lấy toà độ
         val touchX = event?.x
@@ -98,6 +101,16 @@ class DrawingView (context: Context, attributeSet: AttributeSet): View(context, 
         drawPaint.strokeCap = Paint.Cap.ROUND
         canvasPaint = Paint(Paint.DITHER_FLAG) // xdinh kiểu của canvas và làm cho nét vẽ ra đc mịn
         brushSize = 20.toFloat()
+    }
+
+    // thay đổi kích thước cọ vẽ
+    fun changeBrushSize(newSize: Float){
+        brushSize = TypedValue.applyDimension( // chuyển đổi dp sang pixel do newSize được cung cấp theo dp
+            TypedValue.COMPLEX_UNIT_DIP
+            ,newSize
+            ,resources.displayMetrics // số liệu về màn hình trên thiết bị
+        )
+        drawPaint.strokeWidth = brushSize // nét
     }
 
     internal inner class FingerPath(var color:Int , var brushThickness:Float):Path()
