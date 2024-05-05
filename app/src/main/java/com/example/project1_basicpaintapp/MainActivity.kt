@@ -38,25 +38,25 @@ class MainActivity : AppCompatActivity() {
             binding.seekbarBrushSize.visibility = View.GONE
             binding.txtBrushSize.visibility = View.GONE
         }
+
         binding.seekbarBrushSize.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar, p1: Int, p2: Boolean) {
-                binding.txtBrushSize.text = binding.seekbarBrushSize.toString()
+            override fun onProgressChanged(seekBar: SeekBar, progess: Int, p2: Boolean) {
+                binding.txtBrushSize.setText("$progess/100")
                 val brushSize = seekBar.progress.toFloat()
                 binding.drawingView.changeBrushSize(brushSize)
-
 
 
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
-                TODO("Not yet implemented")
             }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
-                TODO("Not yet implemented")
+
             }
 
         })
+
     }
 
 

@@ -34,13 +34,13 @@
         app:layout_constraintVertical_bias="0.989"
         app:srcCompat="@drawable/baseline_brush_24" />
 
-    <androidx.appcompat.widget.AppCompatSeekBar
+    <SeekBar
         android:visibility="gone"
+        android:max="100"
         android:id="@+id/seekbarBrushSize"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:tooltipText="@string/Size"
-        android:progress="100"
+        android:progress="20"
         app:layout_constraintBottom_toBottomOf="@+id/drawingView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -53,7 +53,7 @@
         android:id="@+id/txtBrushSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Size"
+        tools:text="20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekbarBrushSize" />
