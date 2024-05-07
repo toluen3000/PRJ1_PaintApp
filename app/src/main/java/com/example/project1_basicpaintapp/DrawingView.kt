@@ -112,6 +112,11 @@ class DrawingView (context: Context, attributeSet: AttributeSet): View(context, 
         )
         drawPaint.strokeWidth = brushSize // nét
     }
+    // func thay đổi màu cọ
+    fun changeBrushColor(newColor: Int){
+            color = newColor
+            drawPaint.color = color
+    }
 
     internal inner class FingerPath(var color:Int , var brushThickness:Float):Path()
 }
