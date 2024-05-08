@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity() {
         binding.imgBtnBrushColor.setOnClickListener {
             showColorBrushChangeDialog()
         }
+        binding.imgBtnUndo.setOnClickListener {
+            binding.drawingView.UndoPath()
+        }
 
     }
 
