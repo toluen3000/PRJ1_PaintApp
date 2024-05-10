@@ -11,6 +11,8 @@ import android.graphics.Path
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageButton
+
 //Class Kotlin là một khai báo để tạo ra các đối tượng.
 //File Kotlin là một tệp tin chứa mã nguồn bao gồm các class Kotlin và các thành phần khác.
 class DrawingView (context: Context, attributeSet: AttributeSet): View(context, attributeSet){
@@ -64,7 +66,6 @@ class DrawingView (context: Context, attributeSet: AttributeSet): View(context, 
         // lấy toà độ
         val touchX = event?.x
         val touchY = event?.y
-
         when (event?.action){
             // sự kiện này sẽ được kích hoạt khi người dùng bỏ tay ra khỏi màn hình
             MotionEvent.ACTION_DOWN ->{
@@ -119,9 +120,16 @@ class DrawingView (context: Context, attributeSet: AttributeSet): View(context, 
     }
     fun UndoPath(){
         if(paths.size > 0){
-            paths.removeAt(paths.size - 1 )
+            paths.removeAt(paths.size - 2 )
             invalidate() // lam moi layout
         }
+    }
+    fun ClearAll(){
+        if (paths.size > 0){
+            paths.removeAll(paths)
+            invalidate()
+        }
+
     }
 
     internal inner class FingerPath(var color:Int , var brushThickness:Float):Path()
